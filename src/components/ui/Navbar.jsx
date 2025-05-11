@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import {
   Menu as MenuIcon,
-  Search as SearchIcon,
   Movie as MovieIcon,
   Favorite as FavoriteIcon,
   Brightness4 as DarkModeIcon,
