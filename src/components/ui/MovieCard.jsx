@@ -180,4 +180,3 @@ const MovieCard = ({ movie, genres = [] }) => {
 };
 
 export default MovieCard;
-ft;
