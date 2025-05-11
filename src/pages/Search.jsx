@@ -117,6 +117,13 @@ const Search = () => {
     setPage(1);
   };
 
+  // Add this handler
+  const handleClearAll = () => {
+    setSearchQuery("");
+    resetFilters();
+    setPage(1);
+  };
+
   // Handle load more
   const handleLoadMore = () => {
     if (searchData && page < searchData.totalPages) {
@@ -222,6 +229,7 @@ const Search = () => {
           onSearch={handleSearch}
           initialQuery={searchQuery}
           loading={searchLoading}
+          onClear={handleClearAll} // Pass the handler here
         />
       </Box>
 

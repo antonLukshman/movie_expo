@@ -12,7 +12,12 @@ import {
 import { Search as SearchIcon, Clear as ClearIcon } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const SearchBar = ({ onSearch, initialQuery = "", loading = false }) => {
+const SearchBar = ({
+  onSearch,
+  initialQuery = "",
+  loading = false,
+  onClear,
+}) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
@@ -51,6 +56,7 @@ const SearchBar = ({ onSearch, initialQuery = "", loading = false }) => {
 
   const handleClear = () => {
     setSearchQuery("");
+    if (onClear) onClear(); // Call the onClear callback
     // Focus the input after clearing
     document.getElementById("search-input").focus();
   };
