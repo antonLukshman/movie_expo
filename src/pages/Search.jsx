@@ -412,7 +412,7 @@ const Search = () => {
             </Box>
           )}
 
-          {searchQuery && (
+          {searchQuery && filteredMovies.length > 0 && (
             <MovieGrid
               movies={filteredMovies}
               genres={genresData || []}
