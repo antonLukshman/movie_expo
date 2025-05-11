@@ -24,7 +24,7 @@ import { useQuery } from "react-query";
 import MovieCard from "../components/ui/MovieCard";
 import { useFavorites } from "../context/FavoritesContext";
 import { useAuth } from "../context/AuthContext";
-import tmdbApi from "../api/tmdbApi";
+import tmdbApi from "../api";
 
 const Favorites = () => {
   const navigate = useNavigate();
