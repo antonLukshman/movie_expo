@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 import { useMovie } from "../../context/MovieContext";
 import { IMAGE_SIZES } from "../../api/tmdbApi";
-import noImage from "../../assets/images/no-image.png"; // You'll need to add this image
+//import noImage from "../../assets/images/no-image.png"; // You'll need to add this image
 
 const MovieCard = ({ movie, genreMap = {} }) => {
   const { isFavorite, addToFavorites, removeFromFavorites, setLastSearched } =

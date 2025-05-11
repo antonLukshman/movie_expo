@@ -33,7 +33,7 @@ import { useTheme, styled } from "@mui/material/styles";
 import { useMovie } from "../../context/MovieContext";
 import { IMAGE_SIZES } from "../../api/tmdbApi";
 import { motion } from "framer-motion";
-import noImage from "../../assets/images/no-image.png"; // You'll need to add this image
+//import noImage from "../../assets/images/no-image.png"; // You'll need to add this image
 
 // Motion components
 const MotionBox = motion(Box);

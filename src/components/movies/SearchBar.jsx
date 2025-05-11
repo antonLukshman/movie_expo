@@ -27,7 +27,7 @@ import {
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import tmdbApi, { IMAGE_SIZES } from "../../api/tmdbApi";
-import noImage from "../../assets/images/no-image.png"; // You'll need to add this image
+//import noImage from "../../assets/images/no-image.png"; // You'll need to add this image
 
 // Custom styled component for the search input
 const StyledSearchBar = styled(Paper)(({ theme }) => ({
