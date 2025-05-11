@@ -19,11 +19,12 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import Logo from "../components/ui/Logo";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, loginWithGoogle } = useAuth();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -68,6 +69,14 @@ const Login = () => {
 
       setIsLoading(false);
     }, 1000);
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+    const success = await loginWithGoogle();
+    setIsLoading(false);
+    if (!success) setError("Google sign-in failed. Please try again.");
   };
 
   return (
@@ -173,6 +182,17 @@ const Login = () => {
               }
             >
               {isLoading ? "Signing In..." : "Sign In"}
+            </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<GoogleIcon />}
+              onClick={handleGoogleLogin}
+              disabled={isLoading}
+              sx={{ mb: 2 }}
+            >
+              Sign in with Google
             </Button>
           </Box>
         </Paper>

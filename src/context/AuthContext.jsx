@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { auth, googleProvider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -31,6 +33,21 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      setUser({
+        username: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   // Logout function
   const logout = () => {
     setUser(null);
@@ -40,7 +57,9 @@ export const AuthProvider = ({ children }) => {
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, isAuthenticated, loginWithGoogle }}
+    >
       {children}
     </AuthContext.Provider>
   );
