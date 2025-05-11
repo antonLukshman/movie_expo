@@ -1,92 +1,47 @@
-import React, { createContext, useState, useEffect, useMemo } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Create context
-export const AuthContext = createContext({
-  isAuthenticated: false,
-  user: null,
-  login: () => {},
-  logout: () => {},
-});
+const AuthContext = createContext();
 
-// In a real app, this would connect to a backend
-// For this example, we'll just store in localStorage
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    // Check if user data exists in localStorage
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-  // Check if user is already logged in on mount
   useEffect(() => {
-    const checkAuth = () => {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-        setIsAuthenticated(true);
-      }
-      setIsLoading(false);
-    };
-
-    checkAuth();
-  }, []);
-
-  // Login function
-  const login = async (username, password) => {
-    try {
-      // For demo purposes, accept any non-empty credentials
-      if (!username || !password) {
-        throw new Error("Username and password are required");
-      }
-
-      // In a real app, you would validate credentials with an API
-      const userData = {
-        id: Date.now().toString(),
-        username,
-        name: username.charAt(0).toUpperCase() + username.slice(1),
-        avatar: `https://ui-avatars.com/api/?name=${username}&background=random`,
-      };
-
-      // Store user in localStorage
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
-      setIsAuthenticated(true);
-
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+    // Update localStorage when user changes
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
     }
+  }, [user]);
+
+  // Simple login function (in a real app, you'd connect to a backend)
+  const login = (username, password) => {
+    // For demo purposes only - this is NOT secure
+    // In a real app, you'd validate credentials against a backend
+    if (username && password.length >= 6) {
+      setUser({ username });
+      return true;
+    }
+    return false;
   };
 
   // Logout function
   const logout = () => {
-    localStorage.removeItem("user");
     setUser(null);
-    setIsAuthenticated(false);
   };
 
-  // Context value
-  const authContextValue = useMemo(
-    () => ({
-      isAuthenticated,
-      user,
-      login,
-      logout,
-      isLoading,
-    }),
-    [isAuthenticated, user, isLoading]
-  );
+  // Check if user is authenticated
+  const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={authContextValue}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-// Custom hook for using auth context
-export const useAuth = () => {
-  const context = React.useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 };

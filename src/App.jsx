@@ -1,89 +1,85 @@
-import React, { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
 
 // Context Providers
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
-import { MovieProvider } from "./context/MovieContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
+
+// Pages
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import MovieDetails from "./pages/MovieDetails";
+import Favorites from "./pages/Favorites";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 
 // Components
-import Header from "./components/common/Header";
-import LoadingSpinner from "./components/common/LoadingSpinner";
+import Layout from "./components/layout/Layout";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
 
-// Pages (lazy loaded)
-const HomePage = lazy(() => import("./pages/HomePage"));
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const MovieDetailsPage = lazy(() => import("./pages/MovieDetailsPage"));
-const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
-const FavoritesPage = lazy(() => import("./pages/FavoritesPage"));
+// Font imports
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
-// Auth-protected route wrapper
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = JSON.parse(localStorage.getItem("user")) !== null;
+// Create a React Query client with default settings
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
-  if (!isAuthenticated) {
-    // Save the attempted URL for redirecting after login
-    return <Navigate to="/login" state={{ from: window.location }} replace />;
-  }
-
-  return children;
-};
-
-// Loading fallback
-const PageLoading = () => (
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh",
-    }}
-  >
-    <LoadingSpinner />
-  </Box>
-);
+// The PrivateRoute component has been refactored into a separate file
+// Now using the ProtectedRoute component from components/layout/ProtectedRoute.jsx
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <MovieProvider>
-          <BrowserRouter>
-            <CssBaseline />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                minHeight: "100vh",
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <BrowserRouter>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/movie/:id" element={<MovieDetails />} />
+                  <Route
+                    path="/favorites"
+                    element={
+                      <ProtectedRoute>
+                        <Favorites />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/404" element={<NotFound />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
+            </BrowserRouter>
+            <Toaster
+              position="bottom-center"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+                },
               }}
-            >
-              <Header />
-              <Box component="main" sx={{ flexGrow: 1 }}>
-                <Suspense fallback={<PageLoading />}>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/movie/:id" element={<MovieDetailsPage />} />
-                    <Route path="/search" element={<SearchResultsPage />} />
-                    <Route
-                      path="/favorites"
-                      element={
-                        <ProtectedRoute>
-                          <FavoritesPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                  </Routes>
-                </Suspense>
-              </Box>
-            </Box>
-          </BrowserRouter>
-        </MovieProvider>
-      </AuthProvider>
-    </ThemeProvider>
+            />
+          </FavoritesProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
