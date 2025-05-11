@@ -88,7 +88,10 @@ const SearchBar = ({ onSearch, initialQuery = "", loading = false }) => {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search for movies..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            onSearch(e.target.value); // Add this line for instant search
+          }}
           onKeyPress={handleKeyPress}
           inputProps={{ "aria-label": "search movies" }}
           autoFocus={!isMobile}
