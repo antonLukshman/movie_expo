@@ -690,10 +690,11 @@ const MovieDetails = () => {
             m: { xs: 1, sm: 2 },
             width: "100%",
             maxWidth: "900px",
+            height: { xs: "60vh", sm: "70vh", md: "70vh" }, // Set a height for the dialog
           },
         }}
       >
-        <Box sx={{ position: "relative" }}>
+        <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
           <IconButton
             aria-label="close"
             onClick={() => setTrailerOpen(false)}
@@ -711,19 +712,46 @@ const MovieDetails = () => {
           >
             <Close />
           </IconButton>
-          <DialogContent sx={{ p: 0 }}>
-            <Box sx={{ pt: "56.25%", position: "relative" }}>
-              <Box
-                sx={{
+          <DialogContent
+            sx={{
+              p: 0,
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "#000",
+            }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                height: { xs: "40vh", sm: "60vh", md: "65vh" },
+                maxHeight: "100%",
+                maxWidth: "100%",
+                position: "relative",
+              }}
+            >
+              <YouTube
+                videoId={movie.trailer}
+                opts={{
+                  width: "100%",
+                  height: "100%",
+                  playerVars: {
+                    autoplay: 1,
+                    modestbranding: 1,
+                    rel: 0,
+                  },
+                }}
+                style={{
+                  width: "100%",
+                  height: "100%",
                   position: "absolute",
                   top: 0,
                   left: 0,
-                  width: "100%",
-                  height: "100%",
                 }}
-              >
-                <YouTube videoId={movie.trailer} opts={youtubeOpts} />
-              </Box>
+                containerClassName="youtube-container"
+              />
             </Box>
           </DialogContent>
         </Box>
