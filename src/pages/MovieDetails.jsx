@@ -734,15 +734,7 @@ const MovieDetails = () => {
             >
               <YouTube
                 videoId={movie.trailer}
-                opts={{
-                  width: "100%",
-                  height: "100%",
-                  playerVars: {
-                    autoplay: 1,
-                    modestbranding: 1,
-                    rel: 0,
-                  },
-                }}
+                opts={youtubeOpts} // Use the youtubeOpts variable here
                 style={{
                   width: "100%",
                   height: "100%",
