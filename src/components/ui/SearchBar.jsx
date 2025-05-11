@@ -24,7 +24,7 @@ const SearchBar = ({ onSearch, initialQuery = "", loading = false }) => {
     if (initialQuery !== searchQuery) {
       setSearchQuery(initialQuery);
     }
-  }, [initialQuery]);
+  }, [initialQuery, searchQuery]); // Added searchQuery to dependency array
 
   const handleSubmit = (e) => {
     e.preventDefault();
