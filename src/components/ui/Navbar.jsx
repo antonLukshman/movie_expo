@@ -138,14 +138,6 @@ const Navbar = () => {
         )}
 
         <IconButton
-          aria-label="search"
-          onClick={() => console.log("Search clicked")}
-          sx={{ ml: 2, color: mode === "dark" ? "#ffffff" : "#333333" }}
-        >
-          <SearchIcon />
-        </IconButton>
-
-        <IconButton
           onClick={toggleTheme}
           sx={{ ml: 2, color: mode === "dark" ? "#ffffff" : "#333333" }} // Ensure icon is visible
         >
