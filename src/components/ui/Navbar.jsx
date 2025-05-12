@@ -151,9 +151,17 @@ const Navbar = () => {
               aria-controls="profile-menu"
               aria-haspopup="true"
             >
-              <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.main" }}>
-                {user.username.charAt(0).toUpperCase()}
-              </Avatar>
+              {user.photoURL ? (
+                <Avatar
+                  src={user.photoURL}
+                  alt={user.username}
+                  sx={{ width: 32, height: 32 }}
+                />
+              ) : (
+                <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.main" }}>
+                  {user.username.charAt(0).toUpperCase()}
+                </Avatar>
+              )}
             </IconButton>
             <Menu
               id="profile-menu"
